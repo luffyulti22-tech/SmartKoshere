@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SmartKoshere</title>
+<meta name="description" content="SmartKoshere – sensorë për koshere që i dërgojnë bletarit peshën, temperaturën dhe alarmet direkt në telefon.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: warm, confident, rural-tech; a young Albanian startup talking to beekeepers
+   IDEA: the page behaves like a honeycomb frame pulled from a hive – hexagon cells hold content
+   PICTURE: real apiary photos framed in hexagon-masked cells over a honey field, with a live sensor card
+   COLOUR and TYPE: honey #F2A900 dominant, dark comb brown #2B2118, leaf green #4C7A34 accent; Sora + Inter
+   LAYOUT: full-bleed bands: hero, problem, how, features, market, prices, ethics, contact, footer */
+:root{color-scheme:light dark;
+ --bg:light-dark(#ffffff,#1d1610);--ink:light-dark(#2B2118,#f6eee2);--soft:light-dark(#6a5a49,#c9b9a4);
+ --honey:#F2A900;--honey-d:light-dark(#A86B00,#F2B630);--comb:#2B2118;--leaf:#4C7A34;
+ --tint:light-dark(#FDF1D3,#2a2118);--line:light-dark(#eadfcb,#3a2e22)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.6 Inter,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:Sora,Inter,sans-serif;line-height:1.08;margin:0;text-wrap:balance}
+h1{font-size:clamp(34px,5.4vw,58px);font-weight:800}
+h2{font-size:clamp(28px,3.6vw,42px);font-weight:800}
+h3{font-size:19px;font-weight:600}
+p{margin:0}
+a{color:inherit}
+.wrap{max-width:1240px;margin:0 auto}
+.band{padding:clamp(48px,7vw,96px) max(5vw,16px)}
+.lead{font-size:18px;color:var(--soft);max-width:60ch;margin-top:14px}
+.hex{clip-path:polygon(25% 3%,75% 3%,100% 50%,75% 97%,25% 97%,0 50%)}
+.comb{background-color:var(--honey);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='98'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34L28 66zm0 32L0 82' fill='none' stroke='%23ffffff' stroke-opacity='.28' stroke-width='2'/%3E%3C/svg%3E")}
+.photo{position:relative;overflow:hidden}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+
+/* nav */
+nav{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--comb) 94%,transparent);backdrop-filter:blur(8px);color:#fff}
+nav .wrap{display:flex;align-items:center;gap:18px;padding:12px max(5vw,16px);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font:800 19px Sora,sans-serif;text-decoration:none;color:#fff}
+.logo i{width:30px;height:27px;background:var(--honey)}
+nav .links{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+nav .links a{text-decoration:none;padding:10px 12px;border-radius:8px;font-size:15px;color:#f3e7d3}
+nav .links a:hover,nav .links a:focus-visible{background:#ffffff1a;color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 22px;border-radius:999px;background:var(--honey);color:var(--comb);font-weight:600;text-decoration:none;border:0;font-size:16px;cursor:pointer}
+.btn:hover{filter:brightness(1.06)}.btn:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+.btn.ghost{background:transparent;color:inherit;border:2px solid currentColor}
+
+/* hero */
+.hero{background:var(--comb);color:#fff;padding:clamp(40px,6vw,80px) max(5vw,16px) clamp(56px,7vw,96px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:center}
+.hero h1 span{color:var(--honey)}
+.hero .lead{color:#e9dcc6}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.hero .facts{display:flex;gap:28px;flex-wrap:wrap;margin-top:34px;color:#e9dcc6;font-size:14px}
+.hero .facts b{display:block;font:800 26px Sora,sans-serif;color:var(--honey)}
+.stage{position:relative;aspect-ratio:1/0.92}
+.stage .big{position:absolute;inset:0 6% 6% 0}
+.stage .small{position:absolute;width:42%;aspect-ratio:1.15/1;right:0;bottom:0;border:0}
+.live{position:absolute;left:-2%;bottom:4%;background:#fff;color:var(--comb);border-radius:16px;padding:14px 16px;width:min(250px,62%);box-shadow:0 18px 40px #0006}
+.live .t{font-size:13px;color:#6a5a49;display:flex;justify-content:space-between}
+.live .row{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px;font-size:14px}
+.live .row b{font:800 20px Sora,sans-serif}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--leaf);display:inline-block;margin-right:6px;animation:pulse 1.8s infinite}
+@keyframes pulse{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.dot{animation:none}html{scroll-behavior:auto}}
+
+/* problem */
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:36px}
+.card{background:var(--tint);border-radius:18px;padding:26px}
+.card .ic{width:60px;height:52px;display:grid;place-items:center;background:var(--comb);color:var(--honey);margin-bottom:16px}
+.card p{color:var(--soft);margin-top:8px}
+svg.i{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* how */
+.how{background:var(--tint)}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:40px;counter-reset:s}
+.step{position:relative;text-align:center;padding:0 6px}
+.step .ic{width:92px;height:80px;margin:0 auto 16px;display:grid;place-items:center;background:var(--honey);color:var(--comb)}
+.step:last-child .ic{background:var(--leaf);color:#fff}
+.step .ic svg{width:36px;height:36px}
+.step h3::before{counter-increment:s;content:counter(s) ". ";color:var(--honey-d)}
+.step p{color:var(--soft);margin-top:6px;font-size:15.5px}
+
+/* features */
+.feat .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(28px,5vw,64px);align-items:center}
+.feat .photo{aspect-ratio:4/5;border-radius:24px}
+.flist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 26px;margin-top:30px}
+.f{display:flex;gap:14px;align-items:flex-start}
+.f .ic{flex:none;width:52px;height:45px;display:grid;place-items:center;background:var(--honey);color:var(--comb)}
+.f p{color:var(--soft);font-size:15px;margin-top:2px}
+
+/* market */
+.market{background:var(--comb);color:#fff}
+.market .lead{color:#e9dcc6}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:36px}
+.stat{border-top:2px solid #ffffff30;padding-top:18px}
+.stat b{display:block;font:800 clamp(38px,5vw,60px)/1 Sora,sans-serif;color:var(--honey)}
+.stat span{display:block;margin-top:10px;color:#e9dcc6}
+.src{margin-top:26px;font-size:13px;color:#c9b9a4}
+.src a{color:#f3e7d3}
+
+/* prices */
+.prices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:36px}
+.price{border:2px solid var(--line);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:10px}
+.price.main{border-color:var(--honey);background:var(--tint)}
+.price .amt{font:800 40px/1 Sora,sans-serif;white-space:nowrap}
+.price .amt small{font:600 16px Inter,sans-serif;color:var(--soft)}
+.price ul{margin:6px 0 0;padding-left:20px;color:var(--soft)}
+.price li{margin:4px 0}
+.tag{align-self:flex-start;background:var(--leaf);color:#fff;font-size:13px;font-weight:600;padding:4px 10px;border-radius:999px}
+
+/* mission + ethics */
+.mission{background:var(--tint)}
+.mission .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:center}
+.mission blockquote{margin:0;font:800 clamp(24px,3vw,34px)/1.2 Sora,sans-serif;text-wrap:balance}
+.mission .photo{aspect-ratio:16/11;border-radius:24px}
+.eth{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:28px}
+.eth div{display:flex;gap:12px;align-items:flex-start}
+.eth .ic{flex:none;width:44px;height:38px;display:grid;place-items:center;background:var(--leaf);color:#fff}
+.eth .ic svg{width:20px;height:20px}
+.eth p{font-size:15px;color:var(--soft)}
+
+/* contact */
+.contact .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,64px)}
+form{display:grid;gap:14px}
+label{font-weight:600;font-size:15px;display:grid;gap:6px}
+input,select,textarea{font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);min-height:48px}
+textarea{min-height:110px;resize:vertical}
+.ok{display:none;background:var(--tint);border-radius:14px;padding:16px;font-weight:600}
+.contact .info p{color:var(--soft);margin-top:10px}
+.contact .info b{color:var(--ink)}
+
+footer{background:var(--comb);color:#c9b9a4;font-size:14px;padding:36px max(5vw,16px)}
+footer .wrap{display:flex;gap:18px 40px;flex-wrap:wrap;justify-content:space-between}
+footer a{color:#f3e7d3}
+
+@media(max-width:900px){
+ .hero .wrap,.feat .wrap,.mission .wrap,.contact .wrap{grid-template-columns:minmax(0,1fr)}
+ .steps{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:34px}
+ .feat .photo{aspect-ratio:16/10}
+ nav .links{display:none}
+}
+@media(max-width:600px){
+ .grid3,.stats,.prices,.flist,.eth{grid-template-columns:minmax(0,1fr)}
+ .steps{grid-template-columns:minmax(0,1fr)}
+ .live{left:0;width:70%}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+ <symbol id="bug" viewBox="0 0 24 24"><rect x="8" y="7" width="8" height="12" rx="4"/><path d="M12 7V4M8 11H4m16 0h-4M8 16H5m14 0h-3M9 4l1.5 2M15 4l-1.5 2"/></symbol>
+ <symbol id="lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+ <symbol id="tool" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-2.5z"/></symbol>
+ <symbol id="chart" viewBox="0 0 24 24"><path d="M4 19h16M6 15l4-4 3 3 5-6"/></symbol>
+ <symbol id="wifi" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5 13a10 10 0 0 1 14 0M8.5 16.5a5 5 0 0 1 7 0"/><circle cx="12" cy="20" r="1"/></symbol>
+ <symbol id="bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0"/></symbol>
+ <symbol id="scale" viewBox="0 0 24 24"><path d="M6 20h12M8 20l2-12h4l2 12M4 8h16"/></symbol>
+ <symbol id="temp" viewBox="0 0 24 24"><path d="M10 14V5a2 2 0 0 1 4 0v9a4 4 0 1 1-4 0z"/></symbol>
+ <symbol id="sound" viewBox="0 0 24 24"><path d="M4 10v4h4l5 4V6L8 10zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></symbol>
+ <symbol id="pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></symbol>
+ <symbol id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M5 19l1.4-1.4M17.6 6.4 19 5"/></symbol>
+ <symbol id="phone" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/></symbol>
+ <symbol id="heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></symbol>
+ <symbol id="leaf" viewBox="0 0 24 24"><path d="M5 19c0-8 6-14 15-14 0 9-6 15-14 15M5 19l7-7"/></symbol>
+ <symbol id="hand" viewBox="0 0 24 24"><path d="M4 13h4l3 2h4a2 2 0 0 1 0 4H9M4 20h13l4-4"/></symbol>
+</svg>
+
+<nav aria-label="Kryesore"><div class="wrap">
+ <a class="logo" href="#top"><i class="hex"></i>SmartKoshere</a>
+ <div class="links">
+  <a href="#problemi">Problemi</a><a href="#si-funksionon">Si funksionon</a><a href="#produkti">Produkti</a><a href="#tregu">Tregu</a><a href="#cmimet">Çmimet</a><a href="#kontakt">Kontakt</a>
+ </div>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+ <div>
+  <h1>Koshere të zgjuara për <span>bletarë të zgjuar</span></h1>
+  <p class="lead">SmartKoshere është një sensor i vogël që vendoset nën koshere. Ai mat peshën, temperaturën dhe zhurmën e bletëve, dhe ju dërgon njoftim në telefon kur diçka nuk shkon.</p>
+  <div class="cta"><a class="btn" href="#cmimet">Shiko çmimet</a><a class="btn ghost" href="#si-funksionon">Si funksionon</a></div>
+  <div class="facts"><div><b>9.000 Lek</b>sensori i plotë</div><div><b>5 min</b>për ta instaluar</div><div><b>24/7</b>mbikëqyrje</div></div>
+ </div>
+ <div class="stage">
+  <div class="big hex photo comb"><img src="https://images.unsplash.com/photo-1693225428299-996f236f239f?w=1400&q=70&auto=format&fit=crop" alt="Koshere bletësh në një fushë me pemë" onerror="this.remove()"></div>
+  <div class="small hex photo comb"><img src="https://images.unsplash.com/photo-1736578147796-4eafa5512d3b?w=800&q=70&auto=format&fit=crop" alt="Bletë mbi huall mjalti" onerror="this.remove()"></div>
+  <div class="live" aria-label="Shembull i të dhënave nga aplikacioni">
+   <div class="t"><span><i class="dot"></i>Koshereja nr. 7</span><span>tani</span></div>
+   <div class="row"><span>Pesha</span><b>38,4 kg</b></div>
+   <div class="row"><span>Temperatura</span><b>34,8 °C</b></div>
+   <div class="row"><span>Gjendja</span><b style="color:#4C7A34">Normale</b></div>
+  </div>
+ </div>
+</div></header>
+
+<section class="band" id="problemi"><div class="wrap">
+ <h2>Bletari sot punon pa të dhëna</h2>
+ <p class="lead">Shumica e bletarëve e mësojnë gjendjen e koshereve vetëm kur i hapin. Shpesh, kjo është tepër vonë.</p>
+ <div class="grid3">
+  <div class="card"><div class="ic hex"><svg class="i"><use href="#clock"/></svg></div><h3>Kontrolle të shpeshta</h3><p>Bletari duhet të hapë kosheret për të parë gjendjen. Kjo i merr kohë dhe i streson bletët.</p></div>
+  <div class="card"><div class="ic hex"><svg class="i"><use href="#bug"/></svg></div><h3>Sëmundje dhe mot ekstrem</h3><p>Sëmundjet, i ftohti ose nxehtësia zbulohen vonë, kur kolonia është dëmtuar.</p></div>
+  <div class="card"><div class="ic hex"><svg class="i"><use href="#lock"/></svg></div><h3>Vjedhje</h3><p>Kosheret ndodhen shpesh larg shtëpisë dhe askush nuk i mbikëqyr gjatë natës.</p></div>
+ </div>
+</div></section>
+
+<section class="band how" id="si-funksionon"><div class="wrap">
+ <h2>Nga koshereja në telefon në 4 hapa</h2>
+ <div class="steps">
+  <div class="step"><div class="ic hex"><svg class="i"><use href="#tool"/></svg></div><h3>Instalimi</h3><p>Sensori vendoset nën koshere brenda 5 minutash.</p></div>
+  <div class="step"><div class="ic hex"><svg class="i"><use href="#chart"/></svg></div><h3>Matja</h3><p>Çdo orë mat peshën, temperaturën dhe zhurmën.</p></div>
+  <div class="step"><div class="ic hex"><svg class="i"><use href="#wifi"/></svg></div><h3>Dërgimi</h3><p>Të dhënat dërgohen në aplikacion përmes kartës SIM.</p></div>
+  <div class="step"><div class="ic hex"><svg class="i"><use href="#bell"/></svg></div><h3>Veprimi</h3><p>Bletari merr njoftim dhe vepron në kohë.</p></div>
+ </div>
+</div></section>
+
+<section class="band feat" id="produkti"><div class="wrap">
+ <div class="photo comb"><img src="https://images.unsplash.com/photo-1627515780731-9733c69ce0cc?w=1200&q=70&auto=format&fit=crop" alt="Bletar duke punuar me koshere në kopsht" onerror="this.remove()"></div>
+ <div>
+  <h2>Një sensor që „dëgjon“ kosheren</h2>
+  <p class="lead">Gjithçka që ju duhet për të ndjekur bletët, në një kuti të vogël me panel diellor dhe një aplikacion në shqip.</p>
+  <div class="flist">
+   <div class="f"><div class="ic hex"><svg class="i"><use href="#scale"/></svg></div><div><h3>Pesha</h3><p>Sa mjaltë ka koshereja</p></div></div>
+   <div class="f"><div class="ic hex"><svg class="i"><use href="#temp"/></svg></div><div><h3>Temperatura</h3><p>Edhe lagështinë brenda</p></div></div>
+   <div class="f"><div class="ic hex"><svg class="i"><use href="#sound"/></svg></div><div><h3>Zhurma</h3><p>Paralajmëron tufëzimin</p></div></div>
+   <div class="f"><div class="ic hex"><svg class="i"><use href="#pin"/></svg></div><div><h3>GPS</h3><p>Alarm kundër vjedhjes</p></div></div>
+   <div class="f"><div class="ic hex"><svg class="i"><use href="#sun"/></svg></div><div><h3>Panel diellor</h3><p>Pa ndërruar bateri</p></div></div>
+   <div class="f"><div class="ic hex"><svg class="i"><use href="#phone"/></svg></div><div><h3>Aplikacion</h3><p>Njoftime në telefon, në shqip</p></div></div>
+  </div>
+ </div>
+</div></section>
+
+<section class="band market" id="tregu"><div class="wrap">
+ <h2>Bletaria në Shqipëri po rritet shpejt</h2>
+ <p class="lead">Edhe nëse vetëm 1% e koshereve përdorin sensorë, tregu është mbi 6.000 sensorë. Synimi ynë: 300 sensorë në vitin e parë dhe 700 në të dytin.</p>
+ <div class="stats">
+  <div class="stat"><b>645 mijë</b><span>koshere bletësh në vitin 2025</span></div>
+  <div class="stat"><b>+9,8%</b><span>rritje e koshereve në një vit (2024–2025)</span></div>
+  <div class="stat"><b>+105%</b><span>rritje e koshereve në 10 vite (2014–2024)</span></div>
+ </div>
+ <p class="src">Burimi: <a href="https://www.instat.gov.al/media/vbsmlics/statistikat-e-blegtorisë-2025.pdf">INSTAT, Statistikat e blegtorisë 2025</a>; <a href="https://shqiptarja.com/lajm/fermeret-shqiptare-po-braktisin-kafshet-per-bletet-arsyet-pse-po-rritet-numri-i-koshereve">shqiptarja.com</a> sipas të dhënave të INSTAT.</p>
+</div></section>
+
+<section class="band" id="cmimet"><div class="wrap">
+ <h2>Çmime të qarta, pa kosto të fshehura</h2>
+ <div class="prices">
+  <div class="price main"><span class="tag">Më i shituri</span><h3>Sensori SmartKoshere</h3><div class="amt">9.000 <small>Lek</small></div><ul><li>Sensorë për peshë, temperaturë, zhurmë</li><li>GPS dhe panel diellor</li><li>Garanci 2-vjeçare</li></ul></div>
+  <div class="price"><h3>Abonimi në aplikacion</h3><div class="amt">3.000 <small>Lek / vit</small></div><ul><li>Njoftime në kohë reale</li><li>Historiku i të dhënave</li><li>Këshilla për çdo stinë</li></ul></div>
+  <div class="price"><h3>Instalimi</h3><div class="amt">1.000 <small>Lek</small></div><ul><li>Vijmë te bletoria juaj</li><li>Instalim dhe trajnim</li><li>Linjë ndihme në shqip</li></ul></div>
+ </div>
+</div></section>
+
+<section class="band mission"><div class="wrap">
+ <div>
+  <blockquote>Të ndihmojmë çdo bletar shqiptar të mbrojë bletët dhe të prodhojë më shumë mjaltë, me teknologji të thjeshtë dhe me çmim të përballueshëm.</blockquote>
+  <div class="eth">
+   <div><div class="ic hex"><svg class="i"><use href="#heart"/></svg></div><p><b>Mbrojmë bletët.</b> Paralajmërimet e hershme shpëtojnë koloni.</p></div>
+   <div><div class="ic hex"><svg class="i"><use href="#lock"/></svg></div><p><b>Privatësia.</b> Të dhënat e bletarit nuk i shesim te të tjerët.</p></div>
+   <div><div class="ic hex"><svg class="i"><use href="#hand"/></svg></div><p><b>Ndershmëria.</b> Çmime të qarta dhe garanci 2-vjeçare.</p></div>
+   <div><div class="ic hex"><svg class="i"><use href="#leaf"/></svg></div><p><b>Mjedisi.</b> Energji diellore dhe riciklim i sensorëve të vjetër.</p></div>
+  </div>
+ </div>
+ <div class="photo comb"><img src="https://images.unsplash.com/photo-1736578147810-417f3c608a95?w=1200&q=70&auto=format&fit=crop" alt="Bletë brenda një koshereje" onerror="this.remove()"></div>
+</div></section>
+
+<section class="band contact" id="kontakt"><div class="wrap">
+ <div class="info">
+  <h2>Na kontaktoni</h2>
+  <p>Doni një demonstrim falas në bletorinë tuaj? Na shkruani dhe ju kontaktojmë brenda 24 orësh.</p>
+  <p><b>Email:</b> info@smartkoshere.al</p>
+  <p><b>Adresa:</b> Tiranë, Shqipëri</p>
+ </div>
+ <form id="f" novalidate>
+  <label>Emri dhe mbiemri<input id="emri" name="emri" required autocomplete="name"></label>
+  <label>Telefoni ose email-i<input id="kontakti" name="kontakti" required></label>
+  <label>Sa koshere keni?<select id="koshere" name="koshere"><option>1–10</option><option>11–50</option><option>Mbi 50</option></select></label>
+  <label>Mesazhi<textarea id="mesazhi" name="mesazhi" placeholder="P.sh. dua një demonstrim në Korçë"></textarea></label>
+  <button class="btn" type="submit">Kërko demonstrim falas</button>
+  <p class="ok" id="ok" role="status"></p>
+ </form>
+</div></section>
+
+<footer><div class="wrap">
+ <p><b style="color:#fff">SmartKoshere</b> · Projekt shkollor për programin Bëhu Sipërmarrës. Biznesi është fiktiv.</p>
+ <p>Fotot: <a href="https://unsplash.com/photos/IeRTGrMPS6g">micheile henderson</a>, <a href="https://unsplash.com/photos/CXBczd8oblo">Meggyn Pomerleau</a>, <a href="https://unsplash.com/photos/MRBsZgIr2ls">Jordan Ryskamp</a> në Unsplash.</p>
+</div></footer>
+
+<script>
+{
+ const f = document.getElementById('f'), ok = document.getElementById('ok');
+ f.addEventListener('submit', e => {
+  e.preventDefault();
+  const emri = document.getElementById('emri'), k = document.getElementById('kontakti');
+  if (!emri.value.trim() || !k.value.trim()) {
+   ok.style.display = 'block';
+   ok.textContent = 'Ju lutem plotësoni emrin dhe kontaktin.';
+   (emri.value.trim() ? k : emri).focus();
+   return;
+  }
+  ok.style.display = 'block';
+  ok.textContent = 'Faleminderit, ' + emri.value.trim() + '! Kërkesa u regjistrua. (Ky është një projekt shkollor, prandaj mesazhi nuk dërgohet realisht.)';
+  f.reset();
+ });
+}
+</script>
+</body>
+</html>
